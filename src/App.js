@@ -5,58 +5,64 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import './App.css';
 import data from './data.js';
-
+import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
+import Detail from './routes/Detail.js';
 
 function App() {
 
   let [shoes] = useState(data);
+  let navigate = useNavigate();
 
   return (
     <div className="App">
+
       
       <Navbar bg="light" variant="light">
         <Container>
           <Navbar.Brand href="#home">Shopping</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#cart">Cart</Nav.Link>
-            
+            <Nav.Link onClick={()=>(navigate('/'))}>Home</Nav.Link>
+            <Nav.Link onClick={()=>{navigate('/detail')}}>Detail</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
 
-      <div className="main-bg"></div>
 
-      <div className="container">
-        <div className="row">
-          {/* <Card shoes={shoes[0]} i={1}/>
-          <Card shoes={shoes[1]} i={2}/>
-          <Card shoes={shoes[2]} i={3}/> */}
+      <Routes>
+        <Route path ="/"  element={
+        <div>
+          <div className="main-bg"></div>
+          <div className="container">
+            <div className="row">
+              {
+                shoes.map(function(a,i){
+                  return(
+                    <Card shoes={shoes[i]} i={i+1}/>
+                  )
+                })
+              }
+            </div>
+          </div>
+        </div>}/>
+        <Route path ="/detail" element={<Detail/>}/>
+        <Route path ="/about" element={<About/>}>
+          <Route path ="member" element={<div>Member</div>}/>
+          <Route path ="location" element={<div>Location Impormation</div>}/>
+        </Route>
+        <Route path ="*"  element={<div>Page not Found</div>}/>
+      </Routes>
 
-          {
-            shoes.map(function(a,i){
-              return(
-                <Card shoes={shoes[i]} i={i+1}/>
-              )
-            })
-          }
-          
-          {/* {
-            shoes.map(function(a,i){
-              return(
-                <div className="col-md-4" key={i}>
-                  <img src={"https://codingapple1.github.io/shop/shoes"+(i+1)+".jpg"} width="80%" alt="shoes" />
-                  <h4>{shoes[i].title}</h4>
-                  <h5>{shoes[i].price}</h5>
-                  <p>{shoes[i].content}</p>
-                </div>
-              )
-            })
-          } */}
-        </div>
-      </div>
     </div> 
   );
+}
+
+function About(){
+  return(
+    <div>
+      <h4>회사 정보</h4>
+      <Outlet></Outlet>
+    </div>
+  )
 }
 
 function Card(props){
