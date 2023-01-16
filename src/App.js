@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import './App.css';
 import data from './data.js';
-import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
+import {Routes, Route, useNavigate, Outlet} from 'react-router-dom'
 import Detail from './routes/Detail.js';
 
 function App() {
