@@ -1,5 +1,5 @@
 // import logo from './logo.svg';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -8,10 +8,15 @@ import data from './data.js';
 import {Routes, Route, useNavigate, Outlet} from 'react-router-dom'
 import Detail from './routes/Detail.js';
 import axios from 'axios';
+import Cart from './routes/Cart.js';
+
+export let Context1 = createContext();
+
 
 function App() {
 
   let [shoes, setShoes] = useState(data);
+  let [재고] = useState([10,11,12]);
   let navigate = useNavigate();
 
   return (
@@ -57,7 +62,16 @@ function App() {
             }}>더보기</button>
           </div>
         </div>}/>
-        <Route path ="/detail/:id" element={<Detail shoes={shoes} />}/>
+
+        <Route path ="/detail/:id" element={
+          <Context1.Provider value={{재고, shoes}}>
+            <Detail shoes={shoes} />
+
+          </Context1.Provider>
+        }/>
+
+        <Route path = "/cart" element={<Cart/>} />
+
         <Route path ="/about" element={<About/>}>
           <Route path ="member" element={<div>Member</div>}/>
           <Route path ="location" element={<div>Location Impormation</div>}/>

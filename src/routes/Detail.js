@@ -1,15 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {Nav} from 'react-bootstrap'
+import {Nav} from 'react-bootstrap';
+
+import {Context1} from './../App.js';
 
 
 
 function Detail(props){
   
+  let {재고} = useContext(Context1);
+
   let [alert, setAlert] = useState(true);
-  let{id} = useParams();
+  let {id} = useParams();
   let 찾은상품 = props.shoes.find((x)=> x.id == id);
   let [탭, 탭변경] = useState(0);
+  let [fade2, setFade2] = useState('');
   
   useEffect(()=>{
     let a = setTimeout(()=>{setAlert(false)},2000)
@@ -18,8 +23,15 @@ function Detail(props){
     }
   },[])
 
+  useEffect(()=>{
+    setFade2('end')
+    return()=>{
+      setFade2('')
+    }
+  },[])
+
   return(
-    <div className="container">
+    <div className={"container start "+ fade2}>
         {
           alert === true
           ? <div className="alert alert-warning">
@@ -56,16 +68,24 @@ function Detail(props){
   )
 }
 
-function TabContent(props){
-  if(props.탭 == 0){
-    return <div>내용0</div>
-  } 
-  if(props.탭 == 1){
-    return <div>내용1</div>
-  } 
-  if(props.탭 == 2){
-    return <div>내용2</div>
-  } 
+function TabContent({탭}){
+  let [fade, setFade] = useState('')
+  let {재고} = useContext(Context1)
+  useEffect(()=>{
+    setTimeout(()=>{setFade('end')},100)
+    
+    return()=>{
+      
+      setFade('')
+    }
+  },[탭])
+  
+  return (<div className={'start '+fade}>
+    {
+      [<div>{재고}</div>,<div>내용1</div>,<div>내용2</div>][탭]
+    }
+  </div>)
+
 }
 
 
